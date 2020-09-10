@@ -1,11 +1,10 @@
 import pygame
 import sys
 pygame.init()
-if pygame.__version__ == "1.9.6":
-    print("Please upgrade to Pygame v2.0.0 (it may still be in beta, that is ok though)")
+if pygame.__version__[0] != "2":
+    print("Please upgrade to Pygame v2.0.0 or greater (it may still be in beta, that is ok though)")
     print("https://pypi.org/project/pygame/#history")
     sys.exit()
-print(pygame.__version__)
 tilecorr = {
     "z": "tlcorner",
     "v": "tedge",
