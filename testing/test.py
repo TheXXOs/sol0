@@ -107,6 +107,8 @@ class Button():
     def toggle(self):
         global buttonpressed
         if self.toggled:
+            pygame.mixer.music.load("sfx/button.wav")
+            pygame.mixer.music.play()
             if self.status:
                 self.status = False
                 buttonpressed = False
@@ -155,6 +157,7 @@ file = open("levels/test.txt","r")
 cy = 0
 playerx = 0
 playery = 0
+
 for line in file:
     line = line.replace("\n","")
     cx = 0
@@ -249,6 +252,8 @@ while not done:
             playr.y = playery
             playr.x = playerx
             playerdeath = True
+            pygame.mixer.music.load("sfx/hit.wav")
+            pygame.mixer.music.play()
         if (not (a or b or c or d)) and isinstance(i, Button):
             i.toggled = True
     if dok and (goingl or goingr):
@@ -274,6 +279,8 @@ while not done:
         playr.jump = -31
     if dok and jumping:
         playr.jump += 30 # jump height of the player
+        pygame.mixer.music.load("sfx/jump.wav")
+        pygame.mixer.music.play()
     playr.y -= int(playr.jump)
     while playr.x > SCREEN_WIDTH+offset-128:
         offset += 1
