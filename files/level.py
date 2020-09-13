@@ -106,7 +106,7 @@ class player():
         else:
             self.x += 5
 
-def runLevel():
+def runLevel(screen,worldn,leveln, timeswon=0):
     offset = 0
 
     tilecorr = {
@@ -146,8 +146,6 @@ def runLevel():
     walkanim = ["stand","w1","stand","w2"]
     walkpos = 0
 
-    timeswon = 1 #REPLACE WITH INPUT FROM FUNCTION
-
     ##### Colours #####
     BLACK = (  0,   0,   0)
     WHITE = (255, 255, 255)
@@ -157,13 +155,13 @@ def runLevel():
     ##### Screen Initialisation #####
     SCREEN_WIDTH = 768
     SCREEN_HEIGHT = 448
-    size = (SCREEN_WIDTH, SCREEN_HEIGHT)
-    screen = pygame.display.set_mode(size)
-    pygame.display.set_caption("Sol 0 testing")
-    #bgd = pygame.image.load("sprites/bgd/test.png")
-    #bgd = pygame.transform.scale(bgd,(int(SCREEN_WIDTH),int(SCREEN_HEIGHT)))
+    #size = (SCREEN_WIDTH, SCREEN_HEIGHT)
+    #screen = pygame.display.set_mode(size)
+    #pygame.display.set_caption("Sol 0 testing")
+    bgd = pygame.image.load("sprites/bgd/"+worldn+".png")
+    bgd = pygame.transform.scale(bgd,(int(SCREEN_WIDTH),int(SCREEN_HEIGHT)))
     tiles=[]
-    file = open("levels/test.txt","r")
+    file = open("levels/"+worldn+"/"+leveln+".txt","r")
     cy = 0
     playerx = 0
     playery = 0
@@ -182,7 +180,7 @@ def runLevel():
                 newt.xpos = cx*32
                 newt.ypos = cy*32
                 if character not in togglecorr and character != "?":
-                    newt.imgpath = "sprites/world/test/"+tilecorr[character]+".png"
+                    newt.imgpath = "sprites/world/"+worldn+"/"+tilecorr[character]+".png"
                     if tilecorr[character] == "death":
                         newt.death = True
                     elif character == "!":
@@ -207,6 +205,16 @@ def runLevel():
     goingr = False
     playerdeath = False
     buttonpressed = True
+    wToG = {
+        "1": 11.2,
+        "2": 8.9,
+        "3": 10.4,
+        "4": 24.8,
+        "5": 3.7,
+        "6": 9.8,
+        "7": 8.9,
+        "8": 3.7,
+        "test":0.1}
     ##### Main Program Loop #####
     while not done:
         jumping = False
@@ -230,8 +238,8 @@ def runLevel():
                     goingr = False
 
         ##### Game logic #####
-        gravity = 0.1 #mercury = 3.7, venus = 8.9, earth = 9.8, mars = 3.7
-        #jupiter = 24.8, saturn = 10.4, uranus = 8.9, neptune = 11.2, pluto = 0.6
+        gravity = wToG[worldn] #mercury = 3.7, venus = 8.9, earth = 9.8, mars = 3.7
+        #jupiter = 24.8, saturn = 10.4, uranus = 8.9, neptune = 11.2
         lok = False
         rok = False
         uok = False
@@ -321,5 +329,5 @@ def runLevel():
             i.draw(screen, offset)
         pygame.display.flip()
         clock.tick(60)
-pygame.mixer.init()
-runLevel()
+#pygame.mixer.init()
+#runLevel()
