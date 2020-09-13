@@ -1,0 +1,20 @@
+GENERAL
+#000000,#13213c,#8a8b8d,#fca311,#e5e5e5,#ffffff
+SUN (unused)
+#370717,#6a040f,#d00000,#e85c04,#fa9c08,#ffba07
+MERCURY
+#000000,#2e2e2e,#565656,#888888,#c8c8c8,#fefefe
+VENUS
+#000000,#6a6f75,#ab9d92,#b4bbc3,#e9c7a1,#d6dadd
+EARTH
+#081a66,#193910,#4b526f,#6f9558,#b09548,#d4d9dd
+MARS
+#34130a,#582716,#a25231,#c3744b,#e48859,#f3b385
+JUPITER
+#787562,#b37029,#9d6652,#a48477,#ac9b81,#fdf6e4
+SATURN
+#51503e,#56564e,#9f9a72,#c8a36f,#d0bc87,#e9dbb6
+URANUS
+#2c6463,#439d9b,#7ec9c5,#b8e0df,#d4ecec,#f0fefe
+NEPTUNE
+#191a46,#262e6d,#3b54e5,#5ba4d1,#8ccdf5,#a2fcfc
