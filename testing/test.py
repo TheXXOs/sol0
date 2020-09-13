@@ -1,40 +1,11 @@
 import pygame
 import sys
 pygame.init()
-offset = 0
+
 if pygame.__version__[0] != "2":
     print("Please upgrade to Pygame v2.0.0 or greater (it may still be in beta, that is ok though)")
     print("https://pypi.org/project/pygame/#history")
     sys.exit()
-tilecorr = {
-    "z": "tlcorner",
-    "v": "tedge",
-    "m": "trcorner",
-    "q": "blcorner",
-    "t": "bedge",
-    "p": "brcorner",
-    "a": "ledge",
-    "g": "centre",
-    "l": "redge",
-    "1": "decal1",
-    "2": "decal2",
-    "3": "decal3",
-    "4": "decal4",
-    "5": "decal5",
-    "h": "bubble",
-    "x": "tbbeam",
-    "s": "lrbeam",
-    "w": "rbeam",
-    "e": "tbeam",
-    "d": "lbeam",
-    "/": "death"}
-togglecorr = {
-    "<": ["button",True],
-    ",": ["button",False],
-    ">": ["death",True],
-    ".": ["death",False]}
-walkanim = ["stand","w1","stand","w2"]
-walkpos = 0
 
 class tile():
     def __init__(self):
@@ -57,14 +28,14 @@ class toggleTile():
     def __init__(self):
         self.xpos = 0
         self.ypos = 0
-        self.type = "death" #death, button
+        self.type = "death" #death, button, flag
         self.status = True
         self.toggled = False
         self.death = False #this is here purely to prevent crashes
         self.goal = False #this is here purely to prevent crashes
     def drawStart(self):
-        self.onimg = pygame.transform.scale(pygame.image.load("sprites/blocks/"+self.type+"/on.png"),(32,32))
-        self.offimg = pygame.transform.scale(pygame.image.load("sprites/blocks/"+self.type+"/off.png"),(32,32))
+        self.onimg = pygame.transform.scale(pygame.image.load("sprites/test/blocks/"+self.type+"/on.png"),(32,32))
+        self.offimg = pygame.transform.scale(pygame.image.load("sprites/test/blocks/"+self.type+"/off.png"),(32,32))
     def draw(self, screen):
         if self.status:
             screen.blit(self.onimg,[self.xpos-offset,self.ypos])
@@ -91,8 +62,8 @@ class Button():
         self.death = False #this is here purely to prevent crashes
         self.goal = False #this is here purely to prevent crashes
     def drawStart(self):
-        self.onimg = pygame.transform.scale(pygame.image.load("sprites/blocks/buttonpress/on.png"),(32,32))
-        self.offimg = pygame.transform.scale(pygame.image.load("sprites/blocks/buttonpress/off.png"),(32,32))
+        self.onimg = pygame.transform.scale(pygame.image.load("sprites/test/blocks/buttonpress/on.png"),(32,32))
+        self.offimg = pygame.transform.scale(pygame.image.load("sprites/test/blocks/buttonpress/off.png"),(32,32))
     def draw(self, screen):
         if self.status:
             screen.blit(self.onimg,[self.xpos-offset,self.ypos])
@@ -138,6 +109,47 @@ class player():
         else:
             self.x += 5
 
+offset = 0
+
+tilecorr = {
+    "z": "tlcorner",
+    "v": "tedge",
+    "m": "trcorner",
+    "q": "blcorner",
+    "t": "bedge",
+    "p": "brcorner",
+    "a": "ledge",
+    "g": "centre",
+    "l": "redge",
+    "1": "decal1",
+    "2": "decal2",
+    "3": "decal3",
+    "4": "decal4",
+    "5": "decal5",
+    "6": "decal6",
+    "7": "decal7",
+    "8": "decal8",
+    "9": "decal9",
+    "h": "bubble",
+    "x": "tbbeam",
+    "s": "lrbeam",
+    "w": "rbeam",
+    "e": "tbeam",
+    "d": "lbeam",
+    "/": "death",
+    "!": "win"}
+togglecorr = {
+    "<": ["button",True],
+    ",": ["button",False],
+    ">": ["death",True],
+    ".": ["death",False],
+    ":": ["flag",True],
+    ";": ["flag",False]}
+walkanim = ["stand","w1","stand","w2"]
+walkpos = 0
+
+timeswon = 1 #REPLACE WITH INPUT FROM FUNCTION
+
 ##### Colours #####
 BLACK = (  0,   0,   0)
 WHITE = (255, 255, 255)
@@ -175,6 +187,8 @@ for line in file:
                 newt.imgpath = "sprites/test/"+tilecorr[character]+".png"
                 if tilecorr[character] == "death":
                     newt.death = True
+                elif character == "!":
+                    newt.goal = True
             elif character != "?":
                 newt.type = togglecorr[character][0]
                 newt.status = togglecorr[character][1]
@@ -218,14 +232,14 @@ while not done:
                 goingr = False
 
     ##### Game logic #####
-    gravity = 9.8 #mercury = 3.7, venus = 8.9, earth = 9.8, mars = 3.7
-    #jupiter = 24.8, saturn = 10.4, uranus = 8.9, neptune = 11.2, SPACE = 0.1
+    gravity = 0.1 #mercury = 3.7, venus = 8.9, earth = 9.8, mars = 3.7
+    #jupiter = 24.8, saturn = 10.4, uranus = 8.9, neptune = 11.2, pluto = 0.6
     lok = False
     rok = False
     uok = False
     dok = False
     for i in tiles:
-        if (playerdeath and i.type=="death") or (i.type=="button" and (not buttonpressed)):
+        if (playerdeath and i.type=="death") or (i.type=="button" and (not buttonpressed)) or (i.type=="flag" and timeswon>0):
             i.toggle()
             i.toggled = True
         elif isinstance(i,toggleTile) and i.type == "button":

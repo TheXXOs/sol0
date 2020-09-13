@@ -41,17 +41,19 @@ for i in btnl:
 done = False              
 clock = pygame.time.Clock()
 scrstat = 0
-waitup = True
-
+mtime = 0.0
+waitup = ""
+pygame.mixer.music.set_endevent(123456789)
 ##### Main Program Loop #####
 while not done:
     ##### Events Loop #####
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
             done = True
-        elif event.type == pygame.MOUSEBUTTONUP and waitup:
+        elif event.type == pygame.MOUSEBUTTONUP or event.type == 123456789:
             if pygame.mixer.music.get_busy():
-                mtime = (pygame.mixer.music.get_pos()/1000)%22.402
+                mtime += (pygame.mixer.music.get_pos()/1000)%10.707984
+                mtime = mtime%10.707984
                 pygame.mixer.music.stop()
             else:
                 mtime = 0.0
@@ -63,7 +65,6 @@ while not done:
             elif waitup == "start":
                 pygame.mixer.music.load("music/menu1.mp3")
             pygame.mixer.music.play(-1,mtime)
-            waitup = False
             
 
     ##### Game logic #####
