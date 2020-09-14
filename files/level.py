@@ -34,8 +34,8 @@ class toggleTile():
         self.death = False #this is here purely to prevent crashes
         self.goal = False #this is here purely to prevent crashes
     def drawStart(self):
-        self.onimg = pygame.transform.scale(pygame.image.load("sprites/world/test/blocks/"+self.type+"/on.png"),(32,32))
-        self.offimg = pygame.transform.scale(pygame.image.load("sprites/world/test/blocks/"+self.type+"/off.png"),(32,32))
+        self.onimg = pygame.transform.scale(pygame.image.load("files/sprites/world/test/blocks/"+self.type+"/on.png"),(32,32))
+        self.offimg = pygame.transform.scale(pygame.image.load("files/sprites/world/test/blocks/"+self.type+"/off.png"),(32,32))
     def draw(self, screen, offset):
         if self.status:
             screen.blit(self.onimg,[self.xpos-offset,self.ypos])
@@ -62,8 +62,8 @@ class Button():
         self.death = False #this is here purely to prevent crashes
         self.goal = False #this is here purely to prevent crashes
     def drawStart(self):
-        self.onimg = pygame.transform.scale(pygame.image.load("sprites/world/test/blocks/buttonpress/on.png"),(32,32))
-        self.offimg = pygame.transform.scale(pygame.image.load("sprites/world/test/blocks/buttonpress/off.png"),(32,32))
+        self.onimg = pygame.transform.scale(pygame.image.load("files/sprites/world/test/blocks/buttonpress/on.png"),(32,32))
+        self.offimg = pygame.transform.scale(pygame.image.load("files/sprites/world/test/blocks/buttonpress/off.png"),(32,32))
     def draw(self, screen, offset):
         if self.status:
             screen.blit(self.onimg,[self.xpos-offset,self.ypos])
@@ -77,7 +77,7 @@ class Button():
             return False
     def toggle(self):
         if self.toggled:
-            pygame.mixer.music.load("sfx/button.wav")
+            pygame.mixer.music.load("files/sfx/button.wav")
             pygame.mixer.music.play()
             if self.status:
                 self.status = False
@@ -96,9 +96,9 @@ class player():
         self.jump = 0
     def draw(self, screen, offset):
         if self.facing:
-            screen.blit(pygame.transform.flip(pygame.transform.scale(pygame.image.load("sprites/player/"+self.img+".png"),(32,32)), True, False),[self.x-offset,self.y])
+            screen.blit(pygame.transform.flip(pygame.transform.scale(pygame.image.load("files/sprites/player/"+self.img+".png"),(32,32)), True, False),[self.x-offset,self.y])
         else:
-            screen.blit(pygame.transform.scale(pygame.image.load("sprites/player/"+self.img+".png"),(32,32)),[self.x-offset,self.y])
+            screen.blit(pygame.transform.scale(pygame.image.load("files/sprites/player/"+self.img+".png"),(32,32)),[self.x-offset,self.y])
     def move(self, left=False):
         """change left=False to left=True to move left instead of right"""
         if left:
@@ -158,10 +158,10 @@ def runLevel(screen,worldn,leveln, timeswon=0):
     #size = (SCREEN_WIDTH, SCREEN_HEIGHT)
     #screen = pygame.display.set_mode(size)
     #pygame.display.set_caption("Sol 0 testing")
-    bgd = pygame.image.load("sprites/bgd/"+worldn+".png")
+    bgd = pygame.image.load("files/sprites/bgd/"+worldn+".png")
     bgd = pygame.transform.scale(bgd,(int(SCREEN_WIDTH),int(SCREEN_HEIGHT)))
     tiles=[]
-    file = open("levels/"+worldn+"/"+leveln+".txt","r")
+    file = open("files/levels/"+worldn+"/"+leveln+".txt","r")
     cy = 0
     playerx = 0
     playery = 0
@@ -182,7 +182,7 @@ def runLevel(screen,worldn,leveln, timeswon=0):
                 newt.xpos = cx*32
                 newt.ypos = cy*32
                 if character not in togglecorr and character != "?":
-                    newt.imgpath = "sprites/world/"+worldn+"/"+tilecorr[character]+".png"
+                    newt.imgpath = "files/sprites/world/"+worldn+"/"+tilecorr[character]+".png"
                     if tilecorr[character] == "death":
                         newt.death = True
                     elif character == "!":
@@ -233,7 +233,7 @@ def runLevel(screen,worldn,leveln, timeswon=0):
                     goingr = True
                 elif event.key == pygame.K_UP:
                     jumping = True
-                elif event.key == pygame.SPACE:
+                elif event.key == pygame.K_SPACE:
                     if optionmenu:
                         optionmenu = False
                     else:
@@ -268,7 +268,6 @@ def runLevel(screen,worldn,leveln, timeswon=0):
                 c = i.checkoverlap(playr.x+5,playr.y+1, playr.x+26, playr.y+1)
                 d = i.checkoverlap(playr.x+5,playr.y+33, playr.x+26, playr.y+33)
                 buttonpressed = i.status
-                print(buttonpressed)
             if playr.y < 0:
                 playr.y = 1
             elif playr.y > SCREEN_HEIGHT-32:
@@ -287,7 +286,7 @@ def runLevel(screen,worldn,leveln, timeswon=0):
                 playr.y = playery
                 playr.x = playerx
                 playerdeath = True
-                pygame.mixer.music.load("sfx/hit.wav")
+                pygame.mixer.music.load("files/sfx/hit.wav")
                 pygame.mixer.music.play()
             if (a or b or c or d) and i.goal:
                 return True
@@ -320,7 +319,7 @@ def runLevel(screen,worldn,leveln, timeswon=0):
             playr.jump = -31
         if dok and jumping:
             playr.jump += 30 # jump height of the player
-            pygame.mixer.music.load("sfx/jump.wav")
+            pygame.mixer.music.load("files/sfx/jump.wav")
             pygame.mixer.music.play()
         if not optionmenua:
             playr.y -= int(playr.jump)
@@ -332,7 +331,7 @@ def runLevel(screen,worldn,leveln, timeswon=0):
             playr.x=0
         ##### Drawing code #####
         screen.fill(GREY)
-    #    screen.blit(bgd,(0,0))
+        screen.blit(bgd,(0,0))
     #    screen.blit(bgd,(int(SCREEN_WIDTH/2),0))
     #    screen.blit(bgd,(int(SCREEN_WIDTH/2),int(SCREEN_HEIGHT/2)))
     #    screen.blit(bgd,(0,int(SCREEN_HEIGHT/2)))
