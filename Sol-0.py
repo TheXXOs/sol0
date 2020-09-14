@@ -57,7 +57,6 @@ while not done:
                 pygame.mixer.music.stop()
             else:
                 mtime = 0.0
-            print(mtime)
             if waitup == "credits":
                 pygame.mixer.music.load("files/music/menu3.mp3")
             elif waitup == "settings":
