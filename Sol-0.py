@@ -2,6 +2,8 @@ import pygame
 from files import level
 pygame.init()
 
+#level.runLevel(screen, worldn, leveln, timeswon=0)
+
 class Boop():
     def __init__(self):
         self.img = None
@@ -39,7 +41,7 @@ for i in btnl:
         x.h = j[4]
         x.changeimg()
         btns.append(x)
-done = False              
+done = False
 clock = pygame.time.Clock()
 scrstat = 0
 mtime = 0.0
@@ -64,7 +66,6 @@ while not done:
             elif waitup == "start":
                 pygame.mixer.music.load("files/music/menu1.mp3")
             pygame.mixer.music.play(-1,mtime)
-            
 
     ##### Game logic #####
     for i in btns:

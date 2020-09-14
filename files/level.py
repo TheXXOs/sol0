@@ -165,6 +165,8 @@ def runLevel(screen,worldn,leveln, timeswon=0):
     cy = 0
     playerx = 0
     playery = 0
+    optionmenu = False
+    optionmenua = False
 
     for line in file:
         line = line.replace("\n","")
@@ -231,6 +233,11 @@ def runLevel(screen,worldn,leveln, timeswon=0):
                     goingr = True
                 elif event.key == pygame.K_UP:
                     jumping = True
+                elif event.key == pygame.SPACE:
+                    if optionmenu:
+                        optionmenu = False
+                    else:
+                        optionmenu = True
             elif event.type == pygame.KEYUP:
                 if event.key == pygame.K_LEFT:
                     goingl = False
@@ -297,10 +304,14 @@ def runLevel(screen,worldn,leveln, timeswon=0):
             playr.img = "stand"
             walkpos = 0
             pwalk = 0
-        if goingl and not lok:
+        if goingl and not lok and not optionmenua:
             playr.move(True)
-        if goingr and not rok:
+        if goingr and not rok and not optionmenua:
             playr.move(False)
+        if optionmenu:
+            optionmenua = True
+        else:
+            optionmenua = False
         if dok or uok:
             playr.jump = 0
         elif playr.jump - gravity/60*32 > -32:
@@ -311,7 +322,8 @@ def runLevel(screen,worldn,leveln, timeswon=0):
             playr.jump += 30 # jump height of the player
             pygame.mixer.music.load("sfx/jump.wav")
             pygame.mixer.music.play()
-        playr.y -= int(playr.jump)
+        if not optionmenua:
+            playr.y -= int(playr.jump)
         while playr.x > SCREEN_WIDTH+offset-128:
             offset += 1
         while playr.x < offset+128 and offset>=0:
@@ -327,6 +339,8 @@ def runLevel(screen,worldn,leveln, timeswon=0):
         playr.draw(screen, offset)
         for i in tiles:
             i.draw(screen, offset)
+        if optionmenua:
+            pygame.draw.rect(screen,BLACK,pygame.Rect(50,50,668,348))
         pygame.display.flip()
         clock.tick(60)
 #pygame.mixer.init()
