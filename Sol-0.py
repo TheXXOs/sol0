@@ -59,14 +59,14 @@ btnl = [["credits",1,302,232,72,0],["settings",1,375,264,72,0],["start",1,229,18
         ["b1",0,0,192,192,2],["b2",192,0,192,192,2],["b3",384,0,192,192,2],
         ["b4",576,0,192,192,2],["cback",1,1,28*2,36*2,3]]
 levels = {
-    "1": [[0,True],[0,False],[0,False],[0,False]], # unlocking mechanism;
-    "2": [[0,False],[0,False],[0,False],[0,False]],# the number is the times a level has been completed,
-    "3": [[0,False],[0,False],[0,False],[0,False]],# the boolean is if it has been unlocked or not
-    "4": [[0,False],[0,False],[0,False],[0,False]],
-    "5": [[0,False],[0,False],[0,False],[0,False]],
-    "6": [[0,False],[0,False],[0,False],[0,False]],
-    "7": [[0,False],[0,False],[0,False],[0,False]],
-    "8": [[0,False],[0,False],[0,False],[0,False]]}
+    "1": [[0,True],[0,True],[0,True],[0,True]], # unlocking mechanism;
+    "2": [[0,True],[0,True],[0,True],[0,True]],# the number is the times a level has been completed,
+    "3": [[0,True],[0,True],[0,True],[0,True]],# the boolean is if it has been unlocked or not
+    "4": [[0,True],[0,True],[0,True],[0,True]],
+    "5": [[0,True],[0,True],[0,True],[0,True]],
+    "6": [[0,True],[0,True],[0,True],[0,True]],
+    "7": [[0,True],[0,True],[0,True],[0,True]],
+    "8": [[0,True],[0,True],[0,True],[0,True]]}
 bgd = pygame.image.load("files/sprites/bgd/menu.jpg")
 bgd = pygame.transform.scale(bgd,(int(SCREEN_WIDTH),int(SCREEN_HEIGHT)))
 # variable 6: 0 - main, 1 - worlds, 2 - levels, 3 - credits, 4 - playing level
