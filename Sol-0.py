@@ -1,13 +1,19 @@
 import pygame
+import sys
 from files import level
 pygame.init()
 
 #level.runLevel(screen, worldn, leveln, timeswon=0)
 
+if pygame.__version__[0] != "2":
+    print("Please upgrade to Pygame v2.0.0 or greater (it may still be in beta, that is ok though)")
+    print("https://pypi.org/project/pygame/#history")
+    sys.exit()
+
 class TheTitle():
     def __init__(self):
-        self.x = 176
-        self.y = 5
+        self.x = 351
+        self.y = 1
         self.img = pygame.transform.scale(pygame.image.load("files/sprites/menus/title.png"),(416,136))
     def draw(self, screen):
         screen.blit(self.img,(self.x,self.y))
@@ -28,7 +34,7 @@ class Boop():
     def is_clicked(self):
         return pygame.mouse.get_pressed()[0] and pygame.mouse.get_pos()[0] in range(self.x, self.x+self.w) and pygame.mouse.get_pos()[1] in range(self.y, self.y+self.h)
 ##### Colours #####
-BLACK = (  0,   0,   0)
+BLACK = (  0,   0,  10)
 WHITE = (255, 255, 255)
 RED   = (255,   0,   0)
 GREY  = ( 80,  80,  90)
@@ -40,10 +46,24 @@ size = (SCREEN_WIDTH, SCREEN_HEIGHT)
 screen = pygame.display.set_mode(size)
 pygame.display.set_caption("Sol 0")
 btns = []
-btnl = [["credits",268,297,232,72,0],["settings",252,224,264,72,0],["start",292,151,184,72,0],
+btnl = [["credits",1,302,232,72,0],["settings",1,375,264,72,0],["start",1,229,184,72,0],
         ["1",0,0,192,128,1],["2",192,0,192,128,1],["3",384,0,192,128,1],
         ["4",576,0,192,128,1],["5",0,128,192,128,1],["6",192,128,192,128,1],
-        ["7",384,128,192,128,1],["8",576,128,192,128,1], ["wback",292,276,184,72,1]]
+        ["7",384,128,192,128,1],["8",576,128,192,128,1], ["wback",292,276,184,72,1],
+        ["lback",292,276,184,72,2],
+        ["b1",0,0,192,192,2],["b2",192,0,192,192,2],["b3",384,0,192,192,2],
+        ["b4",576,0,192,192,2]]
+levels = {
+    "1": [[0,True],[0,False],[0,False],[0,False]], # unlocking mechanism;
+    "2": [[0,False],[0,False],[0,False],[0,False]],# the number is the times a level has been completed,
+    "3": [[0,False],[0,False],[0,False],[0,False]],# the boolean is if it has been unlocked or not
+    "4": [[0,False],[0,False],[0,False],[0,False]],
+    "5": [[0,False],[0,False],[0,False],[0,False]],
+    "6": [[0,False],[0,False],[0,False],[0,False]],
+    "7": [[0,False],[0,False],[0,False],[0,False]],
+    "8": [[0,False],[0,False],[0,False],[0,False]]}
+bgd = pygame.image.load("files/sprites/bgd/menu.jpg")
+bgd = pygame.transform.scale(bgd,(int(SCREEN_WIDTH),int(SCREEN_HEIGHT)))
 # variable 6: 0 - main, 1 - worlds, 2 - levels, 3 - credits, 4 - playing level
 slide = 0
 for j in btnl:
@@ -66,6 +86,8 @@ mtime = mtime%10.707984
 pygame.mixer.music.play(-1,mtime)
 waitup = ""
 logo = TheTitle()
+planetnum = ""
+oldwaitup = ""
 ##### Main Program Loop #####
 while not done:
     ##### Events Loop #####
@@ -79,21 +101,37 @@ while not done:
                 pygame.mixer.music.stop()
             else:
                 mtime = 0.0
-            if waitup == "credits" or waitup == "start": #or waitup == "settings"
-                pygame.mixer.music.load("files/music/menu2.mp3")
-            elif waitup == "wback":
-                pygame.mixer.music.load("files/music/menu1.mp3")
-            if waitup == "start":
-                slide = 1
-            elif waitup == "credits":
-                slide = 3
-            elif waitup == "wback":
-                slide = 0
-            elif waitup in ["5","7","8"]:
-                slide = 4
-                level.runLevel(screen,waitup,"1",0) # this is the main code, wow, go look at /files/level.py now
-                pygame.mixer.music.load("files/music/menu2.mp3")
-                slide = 1
+            if waitup != oldwaitup:
+                if waitup == "credits" or waitup == "start" or waitup == "lback": #or waitup == "settings"
+                    pygame.mixer.music.load("files/music/menu2.mp3")
+                elif waitup == "wback":
+                    pygame.mixer.music.load("files/music/menu1.mp3")
+                if waitup == "start":
+                    slide = 1
+                elif waitup == "credits":
+                    slide = 3
+                elif waitup == "wback":
+                    slide = 0
+                elif waitup == "lback":
+                    slide = 1
+                elif waitup in ["1","2","3","4","5","6","7","8"]:
+                    slide = 2
+                    planetnum = waitup
+                    pygame.mixer.music.load("files/music/menu3.mp3")
+                elif waitup in ["b1","b2","b3","b4"]:
+                    if levels[planetnum][int(waitup[1])-1][1]:
+                        a = level.runLevel(screen,planetnum,waitup[1],levels[planetnum][int(waitup[1])-1][0]) #this is the game, look at /files/level.py
+                        if a:
+                            levels[planetnum][int(waitup[1])-1][0] += 1
+                            if waitup == "b4" and planetnum != "8":
+                                levels[str(int(planetnum)+1)][0][1] = True
+                            elif planetnum != "8":
+                                levels[planetnum][waitup[1]][1] = True
+                            else:
+                                print("You win")
+                            
+                    pygame.mixer.music.load("files/music/menu3.mp3")
+                oldwaitup = waitup
             pygame.mixer.music.play(-1,mtime)
 
     ##### Game logic #####
@@ -105,6 +143,8 @@ while not done:
             i.changeimg()
     ##### Drawing code #####
     screen.fill(GREY)
+    if slide != 4:
+        screen.blit(bgd,(0,0))
     for i in btns:
         if slide == i.showon:
             i.draw(screen)
