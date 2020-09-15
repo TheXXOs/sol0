@@ -7,6 +7,21 @@ import sys
 #    print("https://pypi.org/project/pygame/#history")
 #    sys.exit()
 
+class Boopy():
+    def __init__(self):
+        self.img = "exitlevel"
+        self.x = 308
+        self.y = 188
+        self.w = 152
+        self.h = 72
+    def changeimg(self, state=1):
+        if self.img:
+            self.ima = pygame.transform.scale(pygame.image.load("files/sprites/menus/"+self.img+"_"+str(state)+".png"),(self.w,self.h))
+    def draw(self, screen):
+        screen.blit(self.ima,(self.x,self.y))
+    def is_clicked(self):
+        return pygame.mouse.get_pressed()[0] and pygame.mouse.get_pos()[0] in range(self.x, self.x+self.w) and pygame.mouse.get_pos()[1] in range(self.y, self.y+self.h)
+
 class tile():
     def __init__(self):
         self.xpos = 0
@@ -167,7 +182,8 @@ def runLevel(screen,worldn,leveln, timeswon=0):
     playery = 0
     optionmenu = False
     optionmenua = False
-
+    waitup = False
+    butten = Boopy()
     for line in file:
         line = line.replace("\n","")
         cx = 0
@@ -243,6 +259,9 @@ def runLevel(screen,worldn,leveln, timeswon=0):
                     goingl = False
                 elif event.key == pygame.K_RIGHT:
                     goingr = False
+            elif event.type == pygame.MOUSEBUTTONUP:
+                if waitup:
+                    return False
 
         ##### Game logic #####
         gravity = wToG[worldn] #mercury = 3.7, venus = 8.9, earth = 9.8, mars = 3.7
@@ -339,7 +358,14 @@ def runLevel(screen,worldn,leveln, timeswon=0):
         for i in tiles:
             i.draw(screen, offset)
         if optionmenua:
-            pygame.draw.rect(screen,BLACK,pygame.Rect(50,50,668,348))
+            pygame.draw.rect(screen,GREY,pygame.Rect(50,50,668,348))
+            if butten.is_clicked():
+                butten.changeimg(0)
+                waitup = True
+            else:
+                butten.changeimg()
+                waitup = False
+            butten.draw(screen)
         pygame.display.flip()
         clock.tick(60)
 #pygame.mixer.init()

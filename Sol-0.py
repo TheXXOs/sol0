@@ -45,6 +45,11 @@ SCREEN_HEIGHT = 448
 size = (SCREEN_WIDTH, SCREEN_HEIGHT)
 screen = pygame.display.set_mode(size)
 pygame.display.set_caption("Sol 0")
+font = pygame.font.SysFont("OCR A Extended",25,False,False)
+texta = font.render("Coding, some tiles, most",True,WHITE)
+textb = font.render("backgrounds - Nick L (TheXXOs)",True,WHITE)
+textc = font.render("Music and menu background - Jack R",True,WHITE)
+textd = font.render("Player sprites and most tiles - Sam L",True,WHITE)
 btns = []
 btnl = [["credits",1,302,232,72,0],["settings",1,375,264,72,0],["start",1,229,184,72,0],
         ["1",0,0,192,128,1],["2",192,0,192,128,1],["3",384,0,192,128,1],
@@ -52,7 +57,7 @@ btnl = [["credits",1,302,232,72,0],["settings",1,375,264,72,0],["start",1,229,18
         ["7",384,128,192,128,1],["8",576,128,192,128,1], ["wback",292,276,184,72,1],
         ["lback",292,276,184,72,2],
         ["b1",0,0,192,192,2],["b2",192,0,192,192,2],["b3",384,0,192,192,2],
-        ["b4",576,0,192,192,2]]
+        ["b4",576,0,192,192,2],["cback",1,1,28*2,36*2,3]]
 levels = {
     "1": [[0,True],[0,False],[0,False],[0,False]], # unlocking mechanism;
     "2": [[0,False],[0,False],[0,False],[0,False]],# the number is the times a level has been completed,
@@ -114,21 +119,28 @@ while not done:
                     slide = 0
                 elif waitup == "lback":
                     slide = 1
+                elif waitup == "cback":
+                    slide = 0
+                    pygame.mixer.music.load("files/music/menu1.mp3")
                 elif waitup in ["1","2","3","4","5","6","7","8"]:
                     slide = 2
                     planetnum = waitup
                     pygame.mixer.music.load("files/music/menu3.mp3")
                 elif waitup in ["b1","b2","b3","b4"]:
-                    if levels[planetnum][int(waitup[1])-1][1]:
+                    if levels[planetnum][int(waitup[1])-1][1]: # if the level is unlocked
+                        slide = 4
                         a = level.runLevel(screen,planetnum,waitup[1],levels[planetnum][int(waitup[1])-1][0]) #this is the game, look at /files/level.py
-                        if a:
+                        if a: # if you beat the level
                             levels[planetnum][int(waitup[1])-1][0] += 1
-                            if waitup == "b4" and planetnum != "8":
-                                levels[str(int(planetnum)+1)][0][1] = True
-                            elif planetnum != "8":
-                                levels[planetnum][waitup[1]][1] = True
-                            else:
-                                print("You win")
+                            if waitup == "b4" and planetnum != "8": # unlock the next one
+                                levels[str(int(planetnum)+1)][0][1] = True # unlock the next one
+                            elif waitup != "b4": # unlock the next one
+                                levels[planetnum][int(waitup[1])][1] = True # unlock the next one
+                            else: # if it's the last level,
+                                print("You win") # you win (do something here)
+                        oldwaitup = "aaaa"
+                        slide = 2
+                        pygame.mixer.music.load("files/music/menu3.mp3")
                             
                     pygame.mixer.music.load("files/music/menu3.mp3")
                 oldwaitup = waitup
@@ -150,6 +162,11 @@ while not done:
             i.draw(screen)
     if slide == 0:
         logo.draw(screen)
+    if slide == 3:
+        screen.blit(texta, [400,0])
+        screen.blit(textb, [318,30])
+        screen.blit(textd, [3,420])
+        screen.blit(textc, [3,390])
     pygame.display.flip()
     clock.tick(60)
 
