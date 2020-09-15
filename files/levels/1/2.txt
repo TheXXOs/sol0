@@ -9,6 +9,6 @@ qtttttttttttttttttttttttl
                         x
                         x
                         x
-0        zv/vm         !x
-zvvvvvvvvgggggvvvvvvvvvvl
-agggggggggggggggggggggggl
+0        zm  zm        !x
+zvvvvvvvvgl//agvvvvvvvvvl
+aggggggggggvvgggggggggggl

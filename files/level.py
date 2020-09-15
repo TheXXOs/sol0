@@ -149,6 +149,7 @@ def runLevel(screen,worldn,leveln, timeswon=0):
         "w": "rbeam",
         "e": "tbeam",
         "d": "lbeam",
+        "o": "bbeam",
         "/": "death",
         "!": "win"}
     togglecorr = {
