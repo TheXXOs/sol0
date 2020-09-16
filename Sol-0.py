@@ -73,7 +73,13 @@ bgd = pygame.transform.scale(bgd,(int(SCREEN_WIDTH),int(SCREEN_HEIGHT)))
 slide = 0
 for j in btnl:
     x = Boop()
-    x.img = j[0]
+    if j[0] in ["1","2","3","4","5","6","7","8"]:
+        if levels[j[0]] == [[0,False],[0,False],[0,False],[0,False]]:
+            x.img = "d"+j[0]
+        else:
+            x.img = j[0]
+    else:
+        x.img = j[0]
     x.x = j[1]
     x.y = j[2]
     x.w = j[3]
@@ -92,7 +98,6 @@ pygame.mixer.music.play(-1,mtime)
 waitup = ""
 logo = TheTitle()
 planetnum = ""
-oldwaitup = ""
 ##### Main Program Loop #####
 while not done:
     ##### Events Loop #####
@@ -106,7 +111,7 @@ while not done:
                 pygame.mixer.music.stop()
             else:
                 mtime = 0.0
-            if waitup != oldwaitup:
+            if waitup:
                 if waitup == "credits" or waitup == "start" or waitup == "lback": #or waitup == "settings"
                     pygame.mixer.music.load("files/music/menu2.mp3")
                 elif waitup == "wback":
@@ -124,7 +129,7 @@ while not done:
                     pygame.mixer.music.load("files/music/menu1.mp3")
                 elif waitup in ["1","2","3","4","5","6","7","8"]:
                     slide = 2
-                    planetnum = waitup
+                    planetnum = waitup[-1]
                     pygame.mixer.music.load("files/music/menu3.mp3")
                 elif waitup in ["b1","b2","b3","b4"]:
                     if levels[planetnum][int(waitup[1])-1][1]: # if the level is unlocked
@@ -134,16 +139,16 @@ while not done:
                             levels[planetnum][int(waitup[1])-1][0] += 1
                             if waitup == "b4" and planetnum != "8": # unlock the next one
                                 levels[str(int(planetnum)+1)][0][1] = True # unlock the next one
+                                btns[3+int(planetnum)].img = btns[3+int(planetnum)].img[-1]
                             elif waitup != "b4": # unlock the next one
                                 levels[planetnum][int(waitup[1])][1] = True # unlock the next one
                             else: # if it's the last level,
                                 print("You win") # you win (do something here)
-                        oldwaitup = "aaaa"
+                        waitup = "aaaa"
                         slide = 2
                         pygame.mixer.music.load("files/music/menu3.mp3")
                             
                     pygame.mixer.music.load("files/music/menu3.mp3")
-                oldwaitup = waitup
             pygame.mixer.music.play(-1,mtime)
 
     ##### Game logic #####
